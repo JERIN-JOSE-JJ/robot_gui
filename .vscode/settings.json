@@ -1,0 +1,27 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/user/thaara_bot/install/robot_gui/lib/python3.10/site-packages",
+        "/home/user/thaara_bot/install/thaarabot_description/lib/python3.10/site-packages",
+        "/home/user/thaara_bot/install/thaarabot_control/lib/python3.10/site-packages",
+        "/home/user/Thaara_bot/build/robot_perception",
+        "/home/user/Thaara_bot/build/robot_navigation",
+        "/home/user/Thaara_bot/build/robot_control",
+        "/home/user/Thaara_bot/build/robot_bringup",
+        "/home/user/Thaara_bot/install/lib/python3.10/site-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/user/thaara_bot/install/robot_gui/lib/python3.10/site-packages",
+        "/home/user/thaara_bot/install/thaarabot_description/lib/python3.10/site-packages",
+        "/home/user/thaara_bot/install/thaarabot_control/lib/python3.10/site-packages",
+        "/home/user/Thaara_bot/build/robot_perception",
+        "/home/user/Thaara_bot/build/robot_navigation",
+        "/home/user/Thaara_bot/build/robot_control",
+        "/home/user/Thaara_bot/build/robot_bringup",
+        "/home/user/Thaara_bot/install/lib/python3.10/site-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ],
+    "ros.distro": "humble"
+}
