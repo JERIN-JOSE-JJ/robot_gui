@@ -61,7 +61,7 @@ class RobotGUI(Gtk.Application):
         # Main window
         window = Gtk.ApplicationWindow(application=self)
         window.set_title("Robot GUI")
-        window.set_default_size(800, 480)
+        window.fullscreen()
         window.add(main_box)
         window.show_all()
 

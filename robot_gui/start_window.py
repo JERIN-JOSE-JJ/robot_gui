@@ -62,11 +62,18 @@ class HomeScreen(Gtk.Box):
         menu.append(about_item)
 
         exit_item = Gtk.MenuItem(label="Exit")
-        exit_item.connect("activate", Gtk.main_quit)
+        exit_item.connect("activate", self.on_exit_clicked)
         menu.append(exit_item)
 
         menu.show_all()
         menu.popup(None, None, None, None, 0, Gtk.get_current_event_time())
+
+    def on_exit_clicked(self,widget):
+        window = self.get_toplevel()
+        if isinstance(window, Gtk.ApplicationWindow):
+            app = window.get_application()
+            if app:
+                app.quit()
 
     def on_about_clicked(self, widget):
         dialog = Gtk.MessageDialog(
