@@ -21,9 +21,18 @@ def load_css():
         screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
     )
 
+def is_raspberry_pi():
+    """Check if running on Raspberry Pi"""
+    try:
+        with open('/proc/device-tree/model', 'r') as f:
+            return 'Raspberry Pi' in f.read()
+    except:
+        return False
+
 class RobotGUI(Gtk.Application):
     def __init__(self):
         super().__init__(application_id="org.robot.gui")
+        self.raspberry_pi = is_raspberry_pi()
 
     def do_activate(self):
         # ROS 2 Initialization
@@ -36,10 +45,25 @@ class RobotGUI(Gtk.Application):
         # Load CSS
         load_css()
 
-        # Stack for all pages
+        # Create a main grid that will properly handle expansion
+        main_grid = Gtk.Grid()
+        main_grid.set_row_homogeneous(False)
+        main_grid.set_column_homogeneous(True)
+
+        # Header bar
+        header = CustomHeaderBarBox()
+        main_grid.attach(header, 0, 0, 1, 1)  # row 0, height 1
+
+        # Stack for all pages - this will expand to fill remaining space
         stack = Gtk.Stack()
         stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT)
         stack.set_transition_duration(500)
+        
+        # Configure stack to expand
+        stack.set_hexpand(True)
+        stack.set_vexpand(True)
+        stack.set_halign(Gtk.Align.FILL)
+        stack.set_valign(Gtk.Align.FILL)
 
         # GUI windows with ros_node injected
         start = HomeScreen(stack, ros_node)
@@ -50,20 +74,50 @@ class RobotGUI(Gtk.Application):
         stack.add_named(manual, "manual")
         stack.add_named(auto, "autonomy")
 
-        # Header bar
-        header = CustomHeaderBarBox()
+        # Attach stack to grid - row 1, and set it to expand
+        main_grid.attach(stack, 0, 1, 1, 1)  # column 0, row 1, width 1, height 1
+        
+        # Configure grid row properties
+        main_grid.set_row_spacing(0)
+        main_grid.set_border_width(0)
 
-        # Layout
-        main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        main_box.pack_start(header, False, False, 0)
-        main_box.pack_start(stack, True, True, 0)
-
-        # Main window
+        # Main window - FULLSCREEN
         window = Gtk.ApplicationWindow(application=self)
         window.set_title("Robot GUI")
+        
+        # Set fullscreen and remove decorations
         window.fullscreen()
-        window.add(main_box)
+        window.set_decorated(False)
+        
+        # Add keyboard escape handler (ESC to exit)
+        window.connect("key-press-event", self.on_key_press)
+        
+        # Add the main grid to window
+        window.add(main_grid)
+        
+        # Show all and ensure everything expands
         window.show_all()
+        
+        # Force size allocation after showing
+        window.resize(1, 1)  # Trigger resize to force expansion
+        
+        # Connect delete event to properly shutdown ROS
+        window.connect("delete-event", self.on_window_delete, ros_node)
+
+    def on_key_press(self, widget, event):
+        """Handle keyboard events - ESC to exit fullscreen"""
+        if event.keyval == Gdk.KEY_Escape:
+            window = self.get_active_window()
+            window.set_decorated(True)
+            window.unfullscreen()
+            # Optional: Add a quit dialog or button
+        return False
+
+    def on_window_delete(self, window, event, ros_node):
+        """Cleanup function when window is closed"""
+        ros_node.destroy_node()
+        rclpy.shutdown()
+        return False
 
 def main():
     app = RobotGUI()
