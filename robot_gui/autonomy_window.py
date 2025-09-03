@@ -15,9 +15,12 @@ class AutonomyWindow(Gtk.Box):
         start_btn.connect("clicked", self.on_start_autonomy)
         self.pack_start(start_btn, True, True, 0)
 
-        back_btn = Gtk.Button(label="Back to Start")
+        back_btn = Gtk.Button(label="← Back")
+        back_btn.set_size_request(150, 60)
+        back_btn.set_hexpand(False)
+        back_btn.set_halign(Gtk.Align.CENTER)
         back_btn.connect("clicked", self.on_back_clicked)
-        self.pack_start(back_btn, False, False, 0)
+        self.pack_start(back_btn, False, False, 10)
 
     def on_start_autonomy(self, widget):
         self.ros_node.publish_mode("autonomous")

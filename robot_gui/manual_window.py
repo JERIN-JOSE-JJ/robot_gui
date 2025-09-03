@@ -57,9 +57,12 @@ class ManualWindow(Gtk.Box):
         self.pack_start(content_box, True, True, 0)
 
         # Back Button
-        back_button = Gtk.Button(label="⏎ Back to Start")
-        back_button.connect("clicked", self.on_back_clicked)
-        self.pack_start(back_button, False, False, 10)
+        back_btn = Gtk.Button(label="← Back")
+        back_btn.set_size_request(150, 60)
+        back_btn.set_hexpand(False)
+        back_btn.set_halign(Gtk.Align.CENTER)
+        back_btn.connect("clicked", self.on_back_clicked)
+        self.pack_start(back_btn, False, False, 10)
 
     def add_control_button(self, grid, label, col, row, callback):
         btn = Gtk.Button(label=label)

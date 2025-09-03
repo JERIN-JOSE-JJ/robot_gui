@@ -75,6 +75,8 @@ class RobotGUI(Gtk.Application):
         camera = CameraWindow(stack, ros_node)
         chat = ChatWindow(stack, ros_node)
 
+        start.camera_window = camera
+
         stack.add_named(start, "start")
         stack.add_named(manual, "manual")
         stack.add_named(auto, "autonomy")

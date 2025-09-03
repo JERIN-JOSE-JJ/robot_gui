@@ -72,6 +72,7 @@ class HomeScreen(Gtk.Box):
 
     def on_camera_clicked(self, button):
         self.stack.set_visible_child_name("camera")
+        self.camera_window.start_camera()
 
 
     def on_chat_clicked(self, button):
