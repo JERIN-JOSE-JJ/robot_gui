@@ -20,7 +20,6 @@ class AutonomyWindow(Gtk.Box):
         self.pack_start(back_btn, False, False, 0)
 
     def on_start_autonomy(self, widget):
-        print("Autonomy started (logic to be implemented)")
         self.ros_node.publish_mode("autonomous")
 
     def on_back_clicked(self, widget):

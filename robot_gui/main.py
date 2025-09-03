@@ -11,6 +11,8 @@ from robot_gui.start_window import HomeScreen
 from robot_gui.manual_window import ManualWindow
 from robot_gui.autonomy_window import AutonomyWindow
 from robot_gui.ros_publisher import ROSPublisher
+from robot_gui.camera import CameraWindow
+from robot_gui.chat_ai import ChatWindow
 
 def load_css():
     css_provider = Gtk.CssProvider()
@@ -58,6 +60,7 @@ class RobotGUI(Gtk.Application):
         stack = Gtk.Stack()
         stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT)
         stack.set_transition_duration(500)
+
         
         # Configure stack to expand
         stack.set_hexpand(True)
@@ -69,10 +72,14 @@ class RobotGUI(Gtk.Application):
         start = HomeScreen(stack, ros_node)
         manual = ManualWindow(stack, ros_node)
         auto = AutonomyWindow(stack, ros_node)
+        camera = CameraWindow(stack, ros_node)
+        chat = ChatWindow(stack, ros_node)
 
         stack.add_named(start, "start")
         stack.add_named(manual, "manual")
         stack.add_named(auto, "autonomy")
+        stack.add_named(camera, "camera")
+        stack.add_named(chat, "chat")
 
         # Attach stack to grid - row 1, and set it to expand
         main_grid.attach(stack, 0, 1, 1, 1)  # column 0, row 1, width 1, height 1

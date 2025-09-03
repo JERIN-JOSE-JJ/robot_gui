@@ -1,6 +1,8 @@
 import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
+from robot_gui.camera import CameraWindow
+from robot_gui.chat_ai import ChatWindow
 
 class HomeScreen(Gtk.Box):
     def __init__(self, stack, ros_node):
@@ -41,7 +43,21 @@ class HomeScreen(Gtk.Box):
         auto_btn.connect("clicked", self.on_autonomy_clicked)
         button_box.pack_start(auto_btn, False, False, 0)
 
-        self.pack_start(button_box, True, True, 0)
+        extra_button_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=15)
+        extra_button_box.set_halign(Gtk.Align.CENTER)
+
+        camera_btn = Gtk.Button(label="Camera")
+        camera_btn.set_size_request(300, 70)
+        camera_btn.connect("clicked",self.on_camera_clicked)
+        extra_button_box.pack_start(camera_btn, False, False, 0)
+
+        chat_btn = Gtk.Button(label="Chat with AI")
+        chat_btn.set_size_request(300, 70)
+        chat_btn.connect("clicked",self.on_chat_clicked)
+        extra_button_box.pack_start(chat_btn, False, False, 0)
+
+        self.pack_start(button_box, False, False, 0)
+        self.pack_start(extra_button_box, False, False, 0)
 
     def publish_mode(self, mode_str):
         self.ros_node.publish_mode(mode_str)
@@ -53,6 +69,13 @@ class HomeScreen(Gtk.Box):
     def on_autonomy_clicked(self, button):
         self.stack.set_visible_child_name("autonomy")
         self.publish_mode("autonomous")
+
+    def on_camera_clicked(self, button):
+        self.stack.set_visible_child_name("camera")
+
+
+    def on_chat_clicked(self, button):
+        self.stack.set_visible_child_name("chat")
 
     def on_menu_clicked(self, button):
         menu = Gtk.Menu()
