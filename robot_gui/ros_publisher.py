@@ -2,6 +2,7 @@ import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from std_msgs.msg import String
+from std_msgs.msg import Bool
 
 class ROSPublisher(Node):
     def __init__(self):
@@ -9,6 +10,7 @@ class ROSPublisher(Node):
         self.cmd_vel_pub = self.create_publisher(Twist, '/manual_cmd_vel', 10)
         self.mode_pub = self.create_publisher(String, '/mode', 10)
         self.servo_pub = self.create_publisher(String, '/servo_control', 10)
+        self.auto_enable_pub = self.create_publisher(Bool, '/autonomy_enable', 10)
 
     def publish_cmd(self, direction):
         msg = Twist()
@@ -28,3 +30,8 @@ class ROSPublisher(Node):
         msg = String()
         msg.data = f"{joint}:{angle}"
         self.servo_pub.publish(msg)
+
+    def enable_autonomy(self, enable: bool):
+        msg = Bool()
+        msg.data = enable
+        self.auto_enable_pub.publish(msg)
