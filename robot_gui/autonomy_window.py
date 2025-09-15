@@ -24,6 +24,8 @@ class AutonomyWindow(Gtk.Box):
 
     def on_start_autonomy(self, widget):
         self.ros_node.publish_mode("autonomous")
+        self.ros_node.enable_autonomy(True)
 
     def on_back_clicked(self, widget):
         self.stack.set_visible_child_name("start")
+        self.ros_node.enable_autonomy(False)
