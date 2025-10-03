@@ -1,8 +1,8 @@
 import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
-from robot_gui.camera import CameraWindow
-from robot_gui.chat_ai import ChatWindow
+import threading
+import os
 
 class HomeScreen(Gtk.Box):
     def __init__(self, stack, ros_node):
@@ -10,9 +10,10 @@ class HomeScreen(Gtk.Box):
         self.stack = stack
         self.ros_node = ros_node
 
+        self.camera_process = None
         self.set_border_width(20)
 
-        # Header with Menu & Title
+        # ---------- Header ----------
         header_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         menu_button = Gtk.Button(label="☰")
         menu_button.set_size_request(40, 40)
@@ -24,12 +25,11 @@ class HomeScreen(Gtk.Box):
         header_box.pack_start(title_label, True, True, 0)
         self.pack_start(header_box, False, False, 0)
 
-        # Control Mode Label
         control_label = Gtk.Label(label="Select Control Mode")
         control_label.set_margin_top(20)
         self.pack_start(control_label, False, False, 0)
 
-        # Control Buttons
+        # ---------- Control Buttons ----------
         button_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=15)
         button_box.set_halign(Gtk.Align.CENTER)
 
@@ -43,22 +43,29 @@ class HomeScreen(Gtk.Box):
         auto_btn.connect("clicked", self.on_autonomy_clicked)
         button_box.pack_start(auto_btn, False, False, 0)
 
+        # ---------- Extra Buttons ----------
         extra_button_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=15)
         extra_button_box.set_halign(Gtk.Align.CENTER)
 
         camera_btn = Gtk.Button(label="Camera")
         camera_btn.set_size_request(300, 70)
-        camera_btn.connect("clicked",self.on_camera_clicked)
+        camera_btn.connect("clicked", self.on_camera_clicked)
         extra_button_box.pack_start(camera_btn, False, False, 0)
 
         chat_btn = Gtk.Button(label="Chat with AI")
         chat_btn.set_size_request(300, 70)
-        chat_btn.connect("clicked",self.on_chat_clicked)
+        chat_btn.connect("clicked", self.on_chat_clicked)
         extra_button_box.pack_start(chat_btn, False, False, 0)
+
+        voice_btn = Gtk.Button(label="🎤 Voice Control")
+        voice_btn.set_size_request(300, 70)
+        voice_btn.connect("clicked", self.on_voice_clicked)
+        extra_button_box.pack_start(voice_btn, False, False, 0)
 
         self.pack_start(button_box, False, False, 0)
         self.pack_start(extra_button_box, False, False, 0)
 
+    # -------------------------------------------------
     def publish_mode(self, mode_str):
         self.ros_node.publish_mode(mode_str)
 
@@ -72,27 +79,31 @@ class HomeScreen(Gtk.Box):
 
     def on_camera_clicked(self, button):
         self.stack.set_visible_child_name("camera")
-        self.camera_window.start_camera()
+        # Launch camera node process only if needed; can add back functionality as required
 
+    def stop_camera_and_node(self):
+        # Implement camera process termination if needed, for clean-up
+        self.stack.set_visible_child_name("start")
 
     def on_chat_clicked(self, button):
         self.stack.set_visible_child_name("chat")
 
+    def on_voice_clicked(self, button):
+        self.stack.set_visible_child_name("voice")
+
+    # ---------- Menu ----------
     def on_menu_clicked(self, button):
         menu = Gtk.Menu()
-
         about_item = Gtk.MenuItem(label="About")
         about_item.connect("activate", self.on_about_clicked)
         menu.append(about_item)
-
         exit_item = Gtk.MenuItem(label="Exit")
         exit_item.connect("activate", self.on_exit_clicked)
         menu.append(exit_item)
-
         menu.show_all()
         menu.popup(None, None, None, None, 0, Gtk.get_current_event_time())
 
-    def on_exit_clicked(self,widget):
+    def on_exit_clicked(self, widget):
         window = self.get_toplevel()
         if isinstance(window, Gtk.ApplicationWindow):
             app = window.get_application()
