@@ -1,20 +1,23 @@
 /* ---------------------- General ---------------------- */
 window {
-    background: linear-gradient(135deg, #1f1c2c, #928dab);
+    /* Oceanic Palette: Dark blue background */
+    background: linear-gradient(135deg, #0f1c2a, #1a2f46);
     font-family: "Segoe UI", sans-serif;
 }
 
 /* ---------------------- Header Bar ---------------------- */
 headerbar {
-    background-color: #2c3e50;
-    color: white;
+    /* Oceanic Palette: Lighter blue header */
+    background-color: #203a52;
+    color: #f0f0f0; /* Light text */
     font-size: 20px;
     font-weight: bold;
     padding: 10px;
 }
 
 #menu-button {
-    background-color: #4a90d9;
+    /* Oceanic Palette: Secondary blue accent */
+    background-color: #00a8ff;
     color: white;
     font-size: 18px;
     border-radius: 8px;
@@ -23,7 +26,7 @@ headerbar {
 }
 
 #menu-button:hover {
-    background-color: #357ABD;
+    background-color: #008fe6;
 }
 
 /* ---------------------- Home (Start) Screen ---------------------- */
@@ -46,7 +49,8 @@ headerbar {
 }
 
 #home-button {
-    background-image: linear-gradient(to right, #56ab2f, #a8e063);
+    /* Oceanic Palette: Teal gradient */
+    background-image: linear-gradient(to right, #2fccab, #38e4c1);
     color: white;
     font-size: 20px;
     border-radius: 12px;
@@ -56,13 +60,14 @@ headerbar {
 }
 
 #home-button:hover {
-    background-image: linear-gradient(to right, #6bc36b, #a8e063);
+    background-image: linear-gradient(to right, #38e4c1, #45f7d3);
     box-shadow: 0 8px 14px rgba(0, 0, 0, 0.4);
 }
 
 /* ---------------------- Manual Control Screen ---------------------- */
 #manual-screen {
-    background: linear-gradient(to right, #141e30, #243b55);
+    /* Oceanic Palette: Lighter blue background */
+    background: linear-gradient(to right, #203a52, #294a6b);
     padding: 20px;
 }
 
@@ -74,7 +79,8 @@ headerbar {
 }
 
 #movement-button {
-    background-color: #2a9d8f;
+    /* Oceanic Palette: Main teal accent */
+    background-color: #2fccab;
     color: #fff;
     font-size: 18px;
     border-radius: 10px;
@@ -84,12 +90,13 @@ headerbar {
 }
 
 #movement-button:hover {
-    background-color: #21867a;
+    background-color: #29b397;
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4);
 }
 
 #back-button {
-    background-color: #e76f51;
+    /* Oceanic Palette: Amber 'back' button */
+    background-color: #fca311;
     color: #fff;
     font-size: 18px;
     border-radius: 10px;
@@ -99,20 +106,21 @@ headerbar {
 }
 
 #back-button:hover {
-    background-color: #c74d30;
+    background-color: #e3920f;
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4);
 }
 
 /* ---------------------- Sliders (Servo) ---------------------- */
 scale trough {
-    background-color: #ddd;
+    background-color: #3e5a78; /* Darker trough for contrast */
     border-radius: 10px;
     min-height: 8px;
     min-width: 8px;
 }
 
 scale slider {
-    background-color: #4a90e2;
+    /* Oceanic Palette: Secondary blue accent */
+    background-color: #00a8ff;
     border-radius: 50%;
     min-height: 20px;
     min-width: 20px;
@@ -120,7 +128,8 @@ scale slider {
 }
 
 scale highlight {
-    background-color: #4a90e2;
+    /* Oceanic Palette: Secondary blue accent */
+    background-color: #00a8ff;
 }
 
 /* Optional Frame labels (for sliders) */

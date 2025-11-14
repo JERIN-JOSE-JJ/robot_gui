@@ -57,21 +57,14 @@ class ManualWindow(Gtk.Box):
         self.pack_start(content_box, True, True, 0)
 
         # Back Button
-        back_btn = Gtk.Button(label="← Back")
-        back_btn.set_size_request(150, 60)
-        back_btn.set_hexpand(False)
-        back_btn.set_halign(Gtk.Align.CENTER)
-        back_btn.connect("clicked", self.on_back_clicked)
-        self.pack_start(back_btn, False, False, 10)
-
+        
     def add_control_button(self, grid, label, col, row, callback):
         btn = Gtk.Button(label=label)
         btn.set_size_request(150, 80)
         btn.connect("clicked", callback)
         grid.attach(btn, col, row, 1, 1)
 
-    def on_back_clicked(self, button):
-        self.stack.set_visible_child_name("start")
+    
 
     # Movement Commands
     def move_forward(self, button): self.ros_node.publish_cmd("forward")

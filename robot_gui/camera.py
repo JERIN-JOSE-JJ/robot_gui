@@ -5,6 +5,7 @@ import cv2
 import numpy as np
 from cv_bridge import CvBridge
 from sensor_msgs.msg import Image
+from std_msgs.msg import String
 
 
 class CameraWindow(Gtk.Box):
@@ -29,33 +30,51 @@ class CameraWindow(Gtk.Box):
         self.detected_list = Gtk.ListBox()
         right_box.pack_start(self.detected_list, True, True, 0)
 
-        back_btn = Gtk.Button(label="← Back")
-        back_btn.set_size_request(150, 60)
-        back_btn.set_hexpand(False)
-        back_btn.set_halign(Gtk.Align.CENTER)
-        back_btn.connect("clicked", self.on_back_clicked)
-        self.pack_start(back_btn, False, False, 10)
+        
 
         self.bridge = CvBridge()
 
-        # Store subscription so we can destroy it later
+        # Subscribe to the image topic with proper callback
         self.image_subscriber = self.ros_node.create_subscription(
-            Image, '/person_follower/image', self.image_callback, 10
+            Image,
+            '/person_follower/image',
+            self.image_callback,
+            10
         )
+
+
+        self.detection_subscriber = ros_node.create_subscription(
+            String,
+            '/person_detection/image',
+            self.detections_callback,
+            10
+        )
+
+    def detections_callback(self, msg):
+        def update_list():
+            self.detected_list.foreach(lambda row: self.detected_list.remove(row))
+            for name in msg.data:  # Assuming msg.data is list of names
+                row = Gtk.ListBoxRow()
+                label = Gtk.Label(label=name)
+                row.add(label)
+                self.detected_list.add(row)
+            self.detected_list.show_all()
+        GLib.idle_add(update_list)
+            
 
     def image_callback(self, msg):
         try:
             frame = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            height, width, channels = frame.shape
+            h, w, c = frame.shape
             pixbuf = GdkPixbuf.Pixbuf.new_from_data(
                 frame.tobytes(),
                 GdkPixbuf.Colorspace.RGB,
                 False,
                 8,
-                width,
-                height,
-                width * channels
+                w,
+                h,
+                w * c
             )
             GLib.idle_add(self.camera_image.set_from_pixbuf, pixbuf)
         except Exception as e:
@@ -66,9 +85,4 @@ class CameraWindow(Gtk.Box):
             self.ros_node.destroy_subscription(self.image_subscriber)
             self.image_subscriber = None
 
-    def on_back_clicked(self, button):
-        self.stop_subscription()
-        # Notify home_screen or main controller to stop camera node subprocess
-        if hasattr(self, 'home_screen'):
-            self.home_screen.stop_camera_and_node()
-        self.stack.set_visible_child_name("start")
+    
